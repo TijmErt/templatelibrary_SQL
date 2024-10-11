@@ -89,6 +89,11 @@
             <artifactId>spring-graphql-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.netflix.graphql.dgs.codegen</groupId>
+            <artifactId>graphql-dgs-codegen-gradle</artifactId>
+            <version>6.2.1</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
