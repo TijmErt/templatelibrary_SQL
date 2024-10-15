@@ -2,8 +2,12 @@ type Query{
     getTemplatePost(id: ID) : TemplatePostModel
 }
 
+type Mutation{
+    createTemplatePost(input: TemplatePostInput) : TemplatePostModel
+}
+
 type TemplatePostModel{
-    documentPost : TemplatePost
+    templatePost : TemplatePost
     documentModel: DocumentModel
 }
 
@@ -22,6 +26,16 @@ type DocumentModel {
     documentName: String!
     documentType: String!
     uploadDate: Date
+}
+
+input TemplatePostInput{
+    title: String!
+    description: String
+    createdDate: Date
+    authorId: String
+
+    documentName: String!
+    documentType: String!
 }
 
 type User {

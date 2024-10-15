@@ -1,9 +1,9 @@
-package com.sjitzooi.templatelibrary_sql.entity.TemplateParts;
+package com.sjitzooi.templatelibrary_sql.entity;
 
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 public class DocumentModel {
@@ -11,5 +11,5 @@ public class DocumentModel {
     private String documentKey;
     private String documentName;
     private String documentType;
-    private Date uploadDate;
+    private LocalDate uploadDate;
 }

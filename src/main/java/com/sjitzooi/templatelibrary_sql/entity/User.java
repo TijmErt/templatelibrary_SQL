@@ -25,7 +25,7 @@ public class User {
 
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "author")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "author")
     private List<TemplatePost> myPosts;
 
     @OneToMany(mappedBy = "author")
