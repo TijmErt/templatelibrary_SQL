@@ -1,5 +1,5 @@
 type Query{
-    getTemplatePost(id: ID) : TemplatePostModel
+    getTemplatePost(id: String!) : TemplatePostModel
 }
 
 type Mutation{

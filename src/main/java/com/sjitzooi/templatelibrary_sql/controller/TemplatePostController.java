@@ -11,11 +11,13 @@ import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostModel;
 import com.sjitzooi.templatelibrary_sql.service.TemplatePostService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.time.LocalDate;
 
 @DgsComponent
 @Transactional
+@CrossOrigin(origins ="*" )
 public class TemplatePostController {
 
     @Autowired

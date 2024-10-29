@@ -2,9 +2,7 @@ package com.sjitzooi.templatelibrary_sql.service;
 
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePost;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostInput;
-import com.sjitzooi.templatelibrary_sql.entity.User;
 import com.sjitzooi.templatelibrary_sql.repository.TemplatePostRepository;
-import com.sjitzooi.templatelibrary_sql.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
