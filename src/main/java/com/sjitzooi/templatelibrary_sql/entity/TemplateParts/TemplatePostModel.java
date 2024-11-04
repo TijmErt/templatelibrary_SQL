@@ -1,6 +1,5 @@
 package com.sjitzooi.templatelibrary_sql.entity.TemplateParts;
 
-import com.sjitzooi.templatelibrary_sql.entity.DocumentModel;
 import lombok.Data;
 
 @Data

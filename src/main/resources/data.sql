@@ -13,3 +13,20 @@ INSERT INTO public.template_post (id, created_date, description, document_key, t
 
 
 /* Reviews */
+
+
+/* Category */
+insert into public.category (id, name) values ('category-id-1', 'category1');
+insert into public.category (id, name) values ('category-id-2', 'category2');
+insert into public.category (id, name) values ('category-id-3', 'category3');
+
+
+/* post_category */
+insert into public.post_category (template_post_id, category_id) values ('tempPost-id-1', 'category-id-1');
+insert into public.post_category (template_post_id, category_id) values ('tempPost-id-3', 'category-id-1');
+insert into public.post_category (template_post_id, category_id) values ('tempPost-id-4', 'category-id-1');
+insert into public.post_category (template_post_id, category_id) values ('tempPost-id-1', 'category-id-2');
+insert into public.post_category (template_post_id, category_id) values ('tempPost-id-2', 'category-id-2');
+insert into public.post_category (template_post_id, category_id) values ('tempPost-id-4', 'category-id-3');
+insert into public.post_category (template_post_id, category_id) values ('tempPost-id-3', 'category-id-3');
+insert into public.post_category (template_post_id, category_id) values ('tempPost-id-2', 'category-id-3');

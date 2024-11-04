@@ -19,6 +19,7 @@ type TemplatePost {
     documentKey: String
     author: User
     reviews: [Review]
+    categories:[category]
 }
 
 type DocumentModel {
@@ -59,6 +60,11 @@ type BookMarkList {
     title: String!
     listOwner: User!
     myPosts: [TemplatePost!]
+}
+
+type category{
+    id: ID!,
+    name: String
 }
 
 scalar Date

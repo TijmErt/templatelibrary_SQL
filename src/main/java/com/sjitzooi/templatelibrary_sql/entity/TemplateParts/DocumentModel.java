@@ -1,4 +1,4 @@
-package com.sjitzooi.templatelibrary_sql.entity;
+package com.sjitzooi.templatelibrary_sql.entity.TemplateParts;
 
 
 import lombok.Data;

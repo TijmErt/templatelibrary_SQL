@@ -1,5 +1,6 @@
 package com.sjitzooi.templatelibrary_sql.entity.TemplateParts;
 
+import com.sjitzooi.templatelibrary_sql.entity.Category;
 import com.sjitzooi.templatelibrary_sql.entity.Review;
 import com.sjitzooi.templatelibrary_sql.entity.User;
 import jakarta.persistence.*;
@@ -36,4 +37,11 @@ public class TemplatePost {
 
     @OneToMany(mappedBy = "reviewedPost")
     private List<Review> reviews;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "post_category",
+            joinColumns = @JoinColumn(name = "template_post_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id") )
+    private List<Category> categories;
 }
