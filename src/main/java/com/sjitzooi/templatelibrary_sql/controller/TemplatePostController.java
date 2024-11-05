@@ -4,7 +4,7 @@ import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
-import com.sjitzooi.templatelibrary_sql.entity.DocumentModel;
+import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.DocumentModel;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePost;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostInput;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostModel;
