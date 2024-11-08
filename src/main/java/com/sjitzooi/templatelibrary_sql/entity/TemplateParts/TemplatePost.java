@@ -25,6 +25,7 @@ public class TemplatePost {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private LocalDate createdDate;

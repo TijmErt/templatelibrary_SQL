@@ -1,4 +1,4 @@
-package com.sjitzooi.templatelibrary_sql;
+package com.sjitzooi.templatelibrary_sql.unittest;
 
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePost;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostInput;

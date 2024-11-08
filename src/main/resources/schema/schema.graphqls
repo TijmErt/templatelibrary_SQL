@@ -3,7 +3,7 @@ type Query{
 }
 
 type Mutation{
-    createTemplatePost(input: TemplatePostInput) : TemplatePostModel
+    createTemplatePost(input: TemplatePostInput!, file: Upload) : TemplatePostModel
 }
 
 type TemplatePostModel{
@@ -37,6 +37,7 @@ input TemplatePostInput{
 
     documentName: String!
     documentType: String!
+
 }
 
 type User {
@@ -68,3 +69,4 @@ type category{
 }
 
 scalar Date
+scalar Upload
