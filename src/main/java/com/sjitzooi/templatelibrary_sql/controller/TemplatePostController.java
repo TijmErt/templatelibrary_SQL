@@ -1,16 +1,17 @@
 package com.sjitzooi.templatelibrary_sql.controller;
 
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsMutation;
-import com.netflix.graphql.dgs.DgsQuery;
-import com.netflix.graphql.dgs.InputArgument;
+import com.netflix.graphql.dgs.*;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.DocumentModel;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePost;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostInput;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostModel;
 import com.sjitzooi.templatelibrary_sql.service.TemplatePostService;
+import graphql.schema.DataFetchingEnvironment;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ import java.time.LocalDate;
 @DgsComponent
 @Transactional
 @CrossOrigin(origins ="*" )
+@Slf4j
 public class TemplatePostController {
 
     @Autowired
@@ -41,9 +43,9 @@ public class TemplatePostController {
     }
 
     @DgsMutation
-    public void createTemplatePost(@InputArgument TemplatePostInput input, @InputArgument("file") MultipartFile file) {
+    public void createTemplatePost(@InputArgument MultipartFile file, @InputArgument TemplatePostInput input) throws IOException {
         DocumentModel docModel = new DocumentModel();
-
+        log.debug(file.getOriginalFilename());
         if (file != null && !file.isEmpty()) {
             String fileType = file.getContentType();
 
@@ -51,8 +53,6 @@ public class TemplatePostController {
             if (!fileType.equals("application/pdf") && !fileType.equals("application/msword")) {
                 throw new IllegalArgumentException("Invalid file type. Only PDF and Word documents are allowed.");
             }
-
-            try {
                 // Read file data
                 byte[] fileData = file.getBytes();
                 long fileSize = file.getSize();
@@ -64,9 +64,6 @@ public class TemplatePostController {
                 docModel.setDocumentType(fileType);
                 docModel.setFileSize(fileSize);
                 docModel.setUploadDate(LocalDate.now());
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to read file data", e);
-            }
         }
 
         TemplatePostModel model = new TemplatePostModel();
