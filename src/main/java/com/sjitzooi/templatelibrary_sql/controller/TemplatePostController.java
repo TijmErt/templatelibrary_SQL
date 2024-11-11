@@ -6,12 +6,9 @@ import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePost;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostInput;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostModel;
 import com.sjitzooi.templatelibrary_sql.service.TemplatePostService;
-import graphql.schema.DataFetchingEnvironment;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +22,10 @@ import java.time.LocalDate;
 public class TemplatePostController {
 
     @Autowired
+    public TemplatePostController(TemplatePostService templatePostService) {
+        this.templatePostService = templatePostService;
+    }
+
     private TemplatePostService templatePostService;
 
     @DgsQuery
@@ -46,7 +47,7 @@ public class TemplatePostController {
     public void createTemplatePost(@InputArgument MultipartFile file, @InputArgument TemplatePostInput input) throws IOException {
         DocumentModel docModel = new DocumentModel();
         log.debug(file.getOriginalFilename());
-        if (file != null && !file.isEmpty()) {
+        if (!file.isEmpty()) {
             String fileType = file.getContentType();
 
             // Validate file type
@@ -77,6 +78,5 @@ public class TemplatePostController {
 
         System.out.println(model.getTemplatePost().getAuthor().getUserName());
         System.out.println(model.getDocumentModel());
-        //return model;
     }
 }
