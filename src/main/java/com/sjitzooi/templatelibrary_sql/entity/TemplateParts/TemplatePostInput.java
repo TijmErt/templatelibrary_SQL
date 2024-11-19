@@ -16,9 +16,4 @@ public class TemplatePostInput {
     private LocalDate createdDate;
 
     private String authorId;
-
-    /* necessary data for DocumentModel */
-    private String documentName;
-    private String documentType;
-    //private File image;
 }

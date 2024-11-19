@@ -3,25 +3,18 @@ package com.sjitzooi.templatelibrary_sql.integrationtest;
 import com.netflix.graphql.dgs.DgsQueryExecutor;
 import com.netflix.graphql.dgs.test.EnableDgsTest;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePost;
-import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostInput;
-import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostModel;
 import com.sjitzooi.templatelibrary_sql.entity.User;
-import com.sjitzooi.templatelibrary_sql.service.TemplatePostService;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Map;
 
 @SpringBootTest
 @ActiveProfiles("test")

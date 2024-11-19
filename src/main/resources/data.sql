@@ -4,7 +4,7 @@ INSERT INTO users (id, email, user_name) VALUES
 ('user-id-2', 'bob@test.com', 'Bob');
 
 -- Test Data for TemplatePosts
-INSERT INTO template_post (id, created_date, description, document_key, title, user_id) VALUES
+INSERT INTO template_post (id, created_date, description, file_key, title, user_id) VALUES
 ('tempPost-id-1', '2024-10-29', 'Description for template post 1', 'Key1', 'Template Post Title 1', 'user-id-1'),
 ('tempPost-id-2', '2024-10-11', 'Description for template post 2', 'Key2', 'Template Post Title 2', 'user-id-1'),
 ('tempPost-id-3', '2024-10-10', 'Description for template post 3', 'Key3', 'Template Post Title 3', 'user-id-2'),

@@ -1,16 +1,17 @@
 package com.sjitzooi.templatelibrary_sql.service;
 
-import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePost;
-import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostInput;
-import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostFilter;
+import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.*;
 import com.sjitzooi.templatelibrary_sql.repository.TemplatePostRepository;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
+@Slf4j
 public class TemplatePostService {
 
     @Autowired
@@ -18,6 +19,9 @@ public class TemplatePostService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private NoSQLCallerService noSQLCallerService;
 
     public Page<TemplatePost> getFilteredTemplatePosts(TemplatePostFilter filter, int page, int size) {
 //        Sort sort = Sort.by(filter.getSortBy());
@@ -30,20 +34,35 @@ public class TemplatePostService {
     return null;
     }
     public TemplatePost getById(String id){
-        return templatePostRepository.findById(id).isPresent() ? templatePostRepository.findById(id).get() : null;
+        TemplatePost post = templatePostRepository.findById(id).isPresent() ? templatePostRepository.findById(id).get() : null;
+
+        return post;
     }
 
-    public TemplatePost save(TemplatePostInput input){
+    public TemplatePost save(MultipartFile file , TemplatePostInput input){
         TemplatePost templatePost = new TemplatePost();
-
         templatePost.setTitle(input.getTitle());
         templatePost.setDescription(input.getDescription());
         templatePost.setCreatedDate(input.getCreatedDate());
         templatePost.setAuthor(userService.getById(input.getAuthorId()));
-        //Add code for uploading file
-        templatePost.setDocumentKey("documentKey");
+
+        log.debug(file.getOriginalFilename());
+        String fileKey = "fileKey_Placeholder";
+        if (!file.isEmpty()) {
+            String fileType = file.getContentType();
+
+            // Validate file type
+            if (!fileType.equals("application/pdf")) {
+                throw new IllegalArgumentException("Invalid file type. Only PDF documents are allowed.");
+            }
+
+            String result = noSQLCallerService.uploadFile(file);
+            if(result != null || !result.equals("")) {
+                fileKey = result;
+            }
+        }
+        templatePost.setFileKey(fileKey);
         templatePostRepository.save(templatePost);
-        //save to backend
         templatePostRepository.flush();
         return templatePost;
     }

@@ -1,32 +1,21 @@
 type Query{
-    getTemplatePost(id: String!) : TemplatePostModel
+    getTemplatePost(id: String!) : TemplatePost
 }
 
 type Mutation{
-    createTemplatePost(input: TemplatePostInput!, file: Upload) : TemplatePostModel
+    createTemplatePost(input: TemplatePostInput!, file: Upload) : String
 }
 
-type TemplatePostModel{
-    templatePost : TemplatePost
-    documentModel: DocumentModel
-}
 
 type TemplatePost {
     id: ID!
     title: String!
     description: String
     createdDate: Date
-    documentKey: String
+    fileKey: String
     author: User
     reviews: [Review]
     categories:[category]
-}
-
-type DocumentModel {
-    documentKey: String!
-    documentName: String!
-    documentType: String!
-    uploadDate: Date
 }
 
 input TemplatePostInput{
@@ -34,10 +23,6 @@ input TemplatePostInput{
     description: String
     createdDate: Date
     authorId: String
-
-    documentName: String!
-    documentType: String!
-
 }
 
 type User {

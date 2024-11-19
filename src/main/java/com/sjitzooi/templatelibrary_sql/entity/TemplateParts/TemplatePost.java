@@ -30,7 +30,7 @@ public class TemplatePost {
 
     private LocalDate createdDate;
 
-    private String documentKey;
+    private String fileKey;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
