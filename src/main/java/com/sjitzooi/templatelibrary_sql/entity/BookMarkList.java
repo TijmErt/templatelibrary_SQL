@@ -32,5 +32,5 @@ public class BookMarkList {
             name = "bookmark_list_template_post",
             joinColumns = @JoinColumn(name = "bookmark_list_id"),
             inverseJoinColumns = @JoinColumn(name = "template_post_id") )
-    private List<TemplatePost> myPosts;
+    private List<TemplatePost> bookMarkedPosts;
 }

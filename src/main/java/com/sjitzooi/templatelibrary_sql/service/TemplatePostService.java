@@ -40,8 +40,9 @@ public class TemplatePostService {
     }
 
     public TemplatePost getById(String id){
-        templatePostRepository.findById(id).isPresent();
-        TemplatePost post = templatePostRepository.findById(id).get();
+        TemplatePost post;
+        if(templatePostRepository.findById(id).isPresent()) post = templatePostRepository.findById(id).get();
+        else post = null;
         return post;
     }
 
