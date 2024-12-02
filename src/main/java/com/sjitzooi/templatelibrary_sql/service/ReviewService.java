@@ -11,7 +11,13 @@ import java.util.List;
 public class ReviewService {
 
     @Autowired
+    public ReviewService(ReviewRepository reviewRepository) {
+        this.reviewRepository = reviewRepository;
+    }
+
     private ReviewRepository reviewRepository;
+
+
 
     public List<Review> findAllFromUser(String user_id) {
         return reviewRepository.findByAuthor_Id(user_id);

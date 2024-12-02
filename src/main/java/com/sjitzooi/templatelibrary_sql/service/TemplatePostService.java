@@ -14,14 +14,19 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class TemplatePostService {
 
-    @Autowired
+
     private TemplatePostRepository templatePostRepository;
 
-    @Autowired
     private UserService userService;
 
-    @Autowired
     private NoSQLCallerService noSQLCallerService;
+
+    @Autowired
+    public TemplatePostService(TemplatePostRepository templatePostRepository, UserService userService, NoSQLCallerService noSQLCallerService) {
+        this.templatePostRepository = templatePostRepository;
+        this.userService = userService;
+        this.noSQLCallerService = noSQLCallerService;
+    }
 
     public Page<TemplatePost> getFilteredTemplatePosts(TemplatePostFilter filter, int page, int size) {
 //        Sort sort = Sort.by(filter.getSortBy());
@@ -31,11 +36,12 @@ public class TemplatePostService {
 //
 //        PageRequest pageRequest = PageRequest.of(page, size, sort);
 //        return templatePostRepository.findFilteredTemplatePosts(filter.getName(), filter.getCategories() != null ? filter.getCategories().stream().map(Tag::getId).toList() : null, pageRequest);
-    return null;
+        return null;
     }
-    public TemplatePost getById(String id){
-        TemplatePost post = templatePostRepository.findById(id).isPresent() ? templatePostRepository.findById(id).get() : null;
 
+    public TemplatePost getById(String id){
+        templatePostRepository.findById(id).isPresent();
+        TemplatePost post = templatePostRepository.findById(id).get()
         return post;
     }
 

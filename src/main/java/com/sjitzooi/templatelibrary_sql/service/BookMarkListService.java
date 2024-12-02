@@ -10,8 +10,13 @@ import java.util.List;
 @Service
 public class BookMarkListService {
 
-    @Autowired
+
     private BookMarkListRepository bookMarkListRepository;
+
+    @Autowired
+    public BookMarkListService(BookMarkListRepository bookMarkListRepository) {
+        this.bookMarkListRepository = bookMarkListRepository;
+    }
 
     public List<BookMarkList> getAllFromUser(String userId) {
         return bookMarkListRepository.findBookMarkListsByListOwner_Id(userId);

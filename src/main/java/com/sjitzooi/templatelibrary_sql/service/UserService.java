@@ -10,8 +10,12 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User getById(String id) {
         return userRepository.findById(id).isPresent() ? userRepository.findById(id).get() : null;

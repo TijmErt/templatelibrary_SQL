@@ -15,10 +15,14 @@ import org.springframework.http.*;
 @Slf4j
 public class NoSQLCallerService {
 
-    @Autowired
     private RestTemplate restTemplate;
 
-    private final String url = "http://localhost:8081/api/DocumentModelController";
+    @Autowired
+    public NoSQLCallerService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    private static String url = "http://localhost:8081/api/DocumentModelController";
     public String uploadFile(MultipartFile file) {
         if(file.isEmpty()) {
             throw new RuntimeException("File is empty");
