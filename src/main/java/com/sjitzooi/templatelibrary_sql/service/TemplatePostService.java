@@ -40,37 +40,50 @@ public class TemplatePostService {
     }
 
     public TemplatePost getById(String id){
-        TemplatePost post;
-        if(templatePostRepository.findById(id).isPresent()) post = templatePostRepository.findById(id).get();
-        else post = null;
-        return post;
+        try{
+            TemplatePost post;
+            if(templatePostRepository.findById(id).isPresent()) post = templatePostRepository.findById(id).get();
+            else post = null;
+            return post;
+        }
+        catch(Exception e){
+            log.debug(e.getMessage());
+            throw e;
+        }
+
     }
 
     public TemplatePost save(MultipartFile file , TemplatePostInput input){
-        TemplatePost templatePost = new TemplatePost();
-        templatePost.setTitle(input.getTitle());
-        templatePost.setDescription(input.getDescription());
-        templatePost.setCreatedDate(input.getCreatedDate());
-        templatePost.setAuthor(userService.getById(input.getAuthorId()));
+        try{
+            TemplatePost templatePost = new TemplatePost();
+            templatePost.setTitle(input.getTitle());
+            templatePost.setDescription(input.getDescription());
+            templatePost.setCreatedDate(input.getCreatedDate());
+            templatePost.setAuthor(userService.getById(input.getAuthorId()));
 
-        log.debug(file.getOriginalFilename());
-        String fileKey = "fileKey_Placeholder";
-        if (!file.isEmpty()) {
-            String fileType = file.getContentType();
+            log.debug(file.getOriginalFilename());
+            String fileKey = "fileKey_Placeholder";
+            if (!file.isEmpty()) {
+                String fileType = file.getContentType();
 
-            // Validate file type
-            if (!fileType.equals("application/pdf")) {
-                throw new IllegalArgumentException("Invalid file type. Only PDF documents are allowed.");
+                // Validate file type
+                if (!fileType.equals("application/pdf")) {
+                    throw new IllegalArgumentException("Invalid file type. Only PDF documents are allowed.");
+                }
+
+                String result = noSQLCallerService.uploadFile(file);
+                if(result != null || !result.equals("")) {
+                    fileKey = result;
+                }
             }
-
-            String result = noSQLCallerService.uploadFile(file);
-            if(result != null || !result.equals("")) {
-                fileKey = result;
-            }
+            templatePost.setFileKey(fileKey);
+            templatePostRepository.save(templatePost);
+            templatePostRepository.flush();
+            return templatePost;
         }
-        templatePost.setFileKey(fileKey);
-        templatePostRepository.save(templatePost);
-        templatePostRepository.flush();
-        return templatePost;
+        catch(Exception e){
+            log.debug(e.getMessage());
+            throw e;
+        }
     }
 }

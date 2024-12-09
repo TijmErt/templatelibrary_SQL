@@ -24,24 +24,30 @@ public class NoSQLCallerService {
 
     private static String url = "http://localhost:8081/api/DocumentModelController";
     public String uploadFile(MultipartFile file) {
-        if(file.isEmpty()) {
-            throw new RuntimeException("File is empty");
+        try{
+            if(file.isEmpty()) {
+                throw new RuntimeException("File is empty");
+            }
+
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("file", file.getResource());
+
+            // Create the request entity with the multipart body and headers
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+            // Call the file upload endpoint
+            String serverUrl = url+"/add";
+            ResponseEntity<String> response = restTemplate.exchange(serverUrl, HttpMethod.POST, requestEntity, String.class);
+
+            // Return the server's response
+            return response.getBody();
         }
-
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", file.getResource());
-
-        // Create the request entity with the multipart body and headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-
-        // Call the file upload endpoint
-        String serverUrl = url+"/add";
-        ResponseEntity<String> response = restTemplate.exchange(serverUrl, HttpMethod.POST, requestEntity, String.class);
-
-        // Return the server's response
-        return response.getBody();
+        catch(Exception e){
+            log.debug(e.getMessage());
+            throw e;
+        }
     }
 }
 

@@ -2,11 +2,13 @@ package com.sjitzooi.templatelibrary_sql.service;
 
 import com.sjitzooi.templatelibrary_sql.entity.BookMarkList;
 import com.sjitzooi.templatelibrary_sql.repository.BookMarkListRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class BookMarkListService {
 
@@ -15,13 +17,31 @@ public class BookMarkListService {
 
     @Autowired
     public BookMarkListService(BookMarkListRepository bookMarkListRepository) {
-        this.bookMarkListRepository = bookMarkListRepository;
+        try{
+            this.bookMarkListRepository = bookMarkListRepository;
+        }
+        catch(Exception e){
+            log.debug(e.getMessage());
+            throw e;
+        }
     }
 
     public List<BookMarkList> getAllFromUser(String userId) {
-        return bookMarkListRepository.findBookMarkListsByListOwner_Id(userId);
+        try{
+            return bookMarkListRepository.findBookMarkListsByListOwner_Id(userId);
+        }
+        catch(Exception e){
+            log.debug(e.getMessage());
+            throw e;
+        }
     }
     public  BookMarkList getBookMarkListById(String id) {
-        return bookMarkListRepository.findById(id).isPresent() ? bookMarkListRepository.findById(id).get() : null;
+        try{
+            return bookMarkListRepository.findById(id).isPresent() ? bookMarkListRepository.findById(id).get() : null;
+        }
+        catch(Exception e){
+            log.debug(e.getMessage());
+            throw e;
+        }
     }
 }

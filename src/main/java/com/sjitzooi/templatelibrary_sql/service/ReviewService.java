@@ -2,11 +2,13 @@ package com.sjitzooi.templatelibrary_sql.service;
 
 import com.sjitzooi.templatelibrary_sql.entity.Review;
 import com.sjitzooi.templatelibrary_sql.repository.ReviewRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class ReviewService {
 
@@ -20,6 +22,12 @@ public class ReviewService {
 
 
     public List<Review> findAllFromUser(String user_id) {
-        return reviewRepository.findByAuthor_Id(user_id);
+        try{
+            return reviewRepository.findByAuthor_Id(user_id);
+        }
+        catch(Exception e){
+            log.debug(e.getMessage());
+            throw e;
+        }
     }
 }

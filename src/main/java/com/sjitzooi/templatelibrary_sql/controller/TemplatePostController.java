@@ -7,6 +7,7 @@ import com.sjitzooi.templatelibrary_sql.service.TemplatePostService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,17 +29,30 @@ public class TemplatePostController {
 
 
     @DgsQuery
-    public TemplatePost getTemplatePost(@InputArgument String id) {
+    public ResponseEntity<TemplatePost> getTemplatePost(@InputArgument String id) {
 
-        TemplatePost model = templatePostService.getById(id);
-        return model;
+        try {
+            TemplatePost model = templatePostService.getById(id);
+            return ResponseEntity.ok(model);
+        }
+        catch (Exception e) {
+            log.debug(e.getMessage());
+            return ResponseEntity.status(500).build();
+        }
     }
 
     @DgsMutation
-    public String createTemplatePost(@InputArgument MultipartFile file, @InputArgument TemplatePostInput input) throws IOException {
-        TemplatePost temp = templatePostService.save(file,input);
-        log.info(temp.getId());
-        log.info(temp.getFileKey());
-        return temp.getId();
+    public ResponseEntity createTemplatePost(@InputArgument MultipartFile file, @InputArgument TemplatePostInput input) throws IOException {
+
+        try{
+            TemplatePost temp = templatePostService.save(file,input);
+            log.info(temp.getId());
+            log.info(temp.getFileKey());
+            return ResponseEntity.ok(temp.getId());
+        }
+        catch(Exception e){
+            log.debug(e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 }
