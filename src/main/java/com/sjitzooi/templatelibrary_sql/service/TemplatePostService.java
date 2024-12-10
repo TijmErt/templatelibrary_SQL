@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class TemplatePostService {
 
+    private static final String ERROR_MESSAGE_SERVICE_LAYER= "TemplatePostService:";
 
     private TemplatePostRepository templatePostRepository;
 
@@ -47,7 +48,7 @@ public class TemplatePostService {
             return post;
         }
         catch(Exception e){
-            log.debug(e.getMessage());
+            log.error(ERROR_MESSAGE_SERVICE_LAYER +" getByID: {}",e.getMessage());
             throw e;
         }
 
@@ -64,13 +65,9 @@ public class TemplatePostService {
             log.debug(file.getOriginalFilename());
             String fileKey = "fileKey_Placeholder";
             if (!file.isEmpty()) {
-                String fileType = file.getContentType();
 
                 // Validate file type
-                if (!fileType.equals("application/pdf")) {
-                    throw new IllegalArgumentException("Invalid file type. Only PDF documents are allowed.");
-                }
-
+                FileValidationChecker.isValid(file);
                 String result = noSQLCallerService.uploadFile(file);
                 if(result != null || !result.equals("")) {
                     fileKey = result;
@@ -82,7 +79,7 @@ public class TemplatePostService {
             return templatePost;
         }
         catch(Exception e){
-            log.debug(e.getMessage());
+            log.error(ERROR_MESSAGE_SERVICE_LAYER +" save: {}",e.getMessage());
             throw e;
         }
     }

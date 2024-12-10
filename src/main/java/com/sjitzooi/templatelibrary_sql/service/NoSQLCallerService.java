@@ -15,6 +15,8 @@ import org.springframework.http.*;
 @Slf4j
 public class NoSQLCallerService {
 
+    private static final String ERROR_MESSAGE_SERVICE_LAYER= "NoSQLCallerService:";
+
     private RestTemplate restTemplate;
 
     @Autowired
@@ -45,7 +47,7 @@ public class NoSQLCallerService {
             return response.getBody();
         }
         catch(Exception e){
-            log.debug(e.getMessage());
+            log.error(ERROR_MESSAGE_SERVICE_LAYER +" uploadFile: {}", e.getMessage());
             throw e;
         }
     }

@@ -12,6 +12,8 @@ import java.util.List;
 @Service
 public class ReviewService {
 
+    private static final String ERROR_MESSAGE_SERVICE_LAYER= "ReviewService:";
+
     @Autowired
     public ReviewService(ReviewRepository reviewRepository) {
         this.reviewRepository = reviewRepository;
@@ -26,7 +28,7 @@ public class ReviewService {
             return reviewRepository.findByAuthor_Id(user_id);
         }
         catch(Exception e){
-            log.debug(e.getMessage());
+            log.error(ERROR_MESSAGE_SERVICE_LAYER +" findAllFromUser: {}",e.getMessage());
             throw e;
         }
     }

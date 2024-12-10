@@ -48,7 +48,11 @@ public class TemplatePostControllerIntegrationTest {
     @Test
     void testCreateTemplatePost() {
         // Act
-        MockMultipartFile file = new MockMultipartFile("file", "test.pdf", "application/pdf", "sample content".getBytes());
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "test.pdf",
+                "application/pdf",
+                new byte[]{0x25, 0x50, 0x44, 0x46, 0x2D} /* Simplified PDF header bytes*/);
 
         // Act
         // Define the GraphQL mutation query with variables

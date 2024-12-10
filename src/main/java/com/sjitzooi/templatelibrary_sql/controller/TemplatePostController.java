@@ -3,6 +3,7 @@ package com.sjitzooi.templatelibrary_sql.controller;
 import com.netflix.graphql.dgs.*;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePost;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostInput;
+import com.sjitzooi.templatelibrary_sql.service.FileValidationChecker;
 import com.sjitzooi.templatelibrary_sql.service.TemplatePostService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,6 @@ import java.io.IOException;
 @CrossOrigin(origins ="*" )
 @Slf4j
 public class TemplatePostController {
-
     @Autowired
     public TemplatePostController(TemplatePostService templatePostService) {
         this.templatePostService = templatePostService;
@@ -29,30 +29,31 @@ public class TemplatePostController {
 
 
     @DgsQuery
-    public ResponseEntity<TemplatePost> getTemplatePost(@InputArgument String id) {
+    public TemplatePost getTemplatePost(@InputArgument String id) {
 
         try {
             TemplatePost model = templatePostService.getById(id);
-            return ResponseEntity.ok(model);
+            log.info("TemplatePost fetched with ID: {}", model.getId());
+            return model;
         }
         catch (Exception e) {
-            log.debug(e.getMessage());
-            return ResponseEntity.status(500).build();
+            log.error(e.getMessage());
+            throw new RuntimeException("Failed to fetch TemplatePost: " + e.getMessage());
         }
     }
 
     @DgsMutation
-    public ResponseEntity createTemplatePost(@InputArgument MultipartFile file, @InputArgument TemplatePostInput input) throws IOException {
+    public String createTemplatePost(@InputArgument MultipartFile file, @InputArgument TemplatePostInput input) throws IOException {
 
         try{
             TemplatePost temp = templatePostService.save(file,input);
-            log.info(temp.getId());
-            log.info(temp.getFileKey());
-            return ResponseEntity.ok(temp.getId());
+            log.info("TemplatePost created with ID: {}", temp.getId());
+            log.info("File stored with key: {}", temp.getFileKey());
+            return temp.getId();
         }
-        catch(Exception e){
-            log.debug(e.getMessage());
-            return ResponseEntity.status(500).body(e.getMessage());
+        catch (Exception e) {
+            log.error("Error creating TemplatePost: {}", e.getMessage());
+            throw new RuntimeException("Failed to create TemplatePost: " + e.getMessage());
         }
     }
 }

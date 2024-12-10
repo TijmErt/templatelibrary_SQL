@@ -4,6 +4,7 @@ import com.sjitzooi.templatelibrary_sql.entity.Category;
 import com.sjitzooi.templatelibrary_sql.entity.Review;
 import com.sjitzooi.templatelibrary_sql.entity.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,13 +24,17 @@ public class TemplatePost {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @NotEmpty
     private String title;
 
+    @NotEmpty
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @PastOrPresent
     private LocalDate createdDate;
 
+    @NotEmpty
     private String fileKey;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -11,6 +11,7 @@ import java.util.List;
 @Service
 public class UserService {
 
+    private static final String ERROR_MESSAGE_SERVICE_LAYER= "TemplatePostService:";
     private UserRepository userRepository;
 
     @Autowired
@@ -23,7 +24,7 @@ public class UserService {
             return userRepository.findById(id).isPresent() ? userRepository.findById(id).get() : null;
         }
         catch(Exception e){
-            log.debug(e.getMessage());
+            log.error(ERROR_MESSAGE_SERVICE_LAYER +" getByID: {}",e.getMessage());
             throw e;
         }
     }

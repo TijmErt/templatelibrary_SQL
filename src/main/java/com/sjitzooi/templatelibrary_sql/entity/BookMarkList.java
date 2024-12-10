@@ -3,6 +3,8 @@ package com.sjitzooi.templatelibrary_sql.entity;
 
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePost;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,8 @@ public class BookMarkList {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @NotBlank
+    @Size(max = 50, message = "Title must be within 0-50 characters")
     private String title;
 
     @ManyToOne

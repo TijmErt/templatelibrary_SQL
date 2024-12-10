@@ -12,18 +12,13 @@ import java.util.List;
 @Service
 public class BookMarkListService {
 
+    private static final String ERROR_MESSAGE_SERVICE_LAYER= "BookMarkListService:";
 
     private BookMarkListRepository bookMarkListRepository;
 
     @Autowired
     public BookMarkListService(BookMarkListRepository bookMarkListRepository) {
-        try{
             this.bookMarkListRepository = bookMarkListRepository;
-        }
-        catch(Exception e){
-            log.debug(e.getMessage());
-            throw e;
-        }
     }
 
     public List<BookMarkList> getAllFromUser(String userId) {
@@ -31,7 +26,7 @@ public class BookMarkListService {
             return bookMarkListRepository.findBookMarkListsByListOwner_Id(userId);
         }
         catch(Exception e){
-            log.debug(e.getMessage());
+            log.error(ERROR_MESSAGE_SERVICE_LAYER +" getAllFromUser: {}", e.getMessage());
             throw e;
         }
     }
@@ -40,7 +35,7 @@ public class BookMarkListService {
             return bookMarkListRepository.findById(id).isPresent() ? bookMarkListRepository.findById(id).get() : null;
         }
         catch(Exception e){
-            log.debug(e.getMessage());
+            log.error(ERROR_MESSAGE_SERVICE_LAYER +" getBookMarkListById: {}", e.getMessage());
             throw e;
         }
     }
