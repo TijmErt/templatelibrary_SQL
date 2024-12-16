@@ -12,7 +12,7 @@ import java.io.IOException;
 @Component
 public class FileValidationChecker {
 
-    public static boolean isValidFileType(MultipartFile file) {
+    private static boolean isValidFileType(MultipartFile file) {
         // Allowed MIME types
         String[] allowedMimeTypes = {
                 "application/msword", // .DOC
@@ -42,7 +42,7 @@ public class FileValidationChecker {
         return false; // Invalid file type
     }
 
-    public static boolean isValidSize(long size) {
+    private static boolean isValidSize(long size) {
         log.info("Checking file size: {}", size);
         return size <= 20 * 1024 * 1024; // Max 20 MB
     }
