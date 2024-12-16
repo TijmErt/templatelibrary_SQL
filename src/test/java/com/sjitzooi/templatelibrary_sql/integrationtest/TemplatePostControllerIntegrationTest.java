@@ -7,14 +7,19 @@ import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePost;
 import com.sjitzooi.templatelibrary_sql.entity.User;
 import com.sjitzooi.templatelibrary_sql.service.NoSQLCallerService;
 
-import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -22,17 +27,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 @SpringBootTest
 @ActiveProfiles("test")
-@Transactional
 @EnableDgsTest
-public class TemplatePostControllerIntegrationTest {
+class TemplatePostControllerIntegrationTest {
 
     @MockBean
     private NoSQLCallerService noSQLCallerService;
@@ -47,6 +50,13 @@ public class TemplatePostControllerIntegrationTest {
     }
     @Test
     void testCreateTemplatePost() {
+        //Arrange
+        //Mocks Security Context Users (allows roles to function)
+        SecurityContextHolder.setContext(SecurityContextHolder.createEmptyContext());
+        Authentication auth = new UsernamePasswordAuthenticationToken("user", "password",
+                List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
         // Act
         MockMultipartFile file = new MockMultipartFile(
                 "file",
@@ -54,13 +64,12 @@ public class TemplatePostControllerIntegrationTest {
                 "application/pdf",
                 new byte[]{0x25, 0x50, 0x44, 0x46, 0x2D} /* Simplified PDF header bytes*/);
 
-        // Act
-        // Define the GraphQL mutation query with variables
         String mutation = """
         mutation createTemplatePost($file: Upload!, $input: TemplatePostInput!) {
             createTemplatePost(file: $file, input: $input)
         }
     """;
+
 
         // Prepare the variables
         Map<String, Object> variables = new HashMap<>();
@@ -74,8 +83,13 @@ public class TemplatePostControllerIntegrationTest {
         variables.put("input", inputMap); // Attach input object
 
         when(noSQLCallerService.uploadFile(any())).thenReturn("documentKey");
+
+
+        HttpHeaders headers = new HttpHeaders();
+        String userCredentials = Base64.getEncoder().encodeToString("user:password".getBytes());
+        headers.set(HttpHeaders.AUTHORIZATION, "Basic " + userCredentials);
         // Assert
-        String result = dgsQueryExecutor.executeAndExtractJsonPath(mutation, "data.createTemplatePost", variables);
+        String result = dgsQueryExecutor.executeAndExtractJsonPathAsObject(mutation, "data.createTemplatePost", variables, String.class, headers);
         assertNotNull(result, "createTemplatePost should return an ID");
         assertFalse(result.isEmpty(), "Returned ID should not be empty");
 
