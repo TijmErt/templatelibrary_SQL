@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +29,7 @@ public class TemplatePostController {
 
 
 
+
     @DgsQuery
     public TemplatePost getTemplatePost(@InputArgument String id) {
 
@@ -42,6 +44,7 @@ public class TemplatePostController {
         }
     }
 
+    @Secured("ROLE_USER")
     @DgsMutation
     public String createTemplatePost(@InputArgument MultipartFile file, @InputArgument TemplatePostInput input) throws IOException {
 
