@@ -29,11 +29,11 @@ public class FileValidationChecker {
 
             // Check if MIME type is in the allowed list
             for (String allowedType : allowedMimeTypes) {
+                log.info("AllowedType: "+allowedType +"= CurrentType:  "+ mimeType);
                 if (mimeType.equals(allowedType)) {
                     return true; // Valid file type
 
                 }
-                log.info("AllowedType: "+allowedType +"= CurrentType:  "+ mimeType);
             }
         } catch (IOException e) {
             e.printStackTrace();
