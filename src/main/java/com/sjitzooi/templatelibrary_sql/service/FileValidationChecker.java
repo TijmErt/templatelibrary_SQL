@@ -15,9 +15,7 @@ public class FileValidationChecker {
     private static boolean isValidFileType(MultipartFile file) {
         // Allowed MIME types
         String[] allowedMimeTypes = {
-                "application/msword", // .DOC
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .DOCX
-                "application/vnd.oasis.opendocument.text", // .ODT
                 "application/pdf" // .PDF
         };
         log.info("Checking file type: {}", file.getContentType());
