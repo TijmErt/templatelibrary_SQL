@@ -23,6 +23,6 @@ public class Category {
     @NotBlank(message = "name must not be blank or null")
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "categories")
+    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "categories")
     private List<TemplatePost> posts;
 }

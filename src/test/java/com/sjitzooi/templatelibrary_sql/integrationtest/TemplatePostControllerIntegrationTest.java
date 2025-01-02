@@ -112,7 +112,8 @@ class TemplatePostControllerIntegrationTest {
                 "Key1",
                 expectedAuthor,
                 new ArrayList<>(),
-                new ArrayList<>()
+                new ArrayList<>(),
+                0.0
         );
         // Act
         String query = """

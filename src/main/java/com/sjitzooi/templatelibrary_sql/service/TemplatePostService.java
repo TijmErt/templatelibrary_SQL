@@ -6,8 +6,14 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -29,15 +35,41 @@ public class TemplatePostService {
         this.noSQLCallerService = noSQLCallerService;
     }
 
-    public Page<TemplatePost> getFilteredTemplatePosts(TemplatePostFilter filter, int page, int size) {
-//        Sort sort = Sort.by(filter.getSortBy());
-//        if (filter.getAscending() != null && !filter.getAscending()) {
-//            sort = sort.descending();
-//        }
-//
-//        PageRequest pageRequest = PageRequest.of(page, size, sort);
-//        return templatePostRepository.findFilteredTemplatePosts(filter.getName(), filter.getCategories() != null ? filter.getCategories().stream().map(Tag::getId).toList() : null, pageRequest);
-        return null;
+    public TemplatePostConnection getFilteredTemplatePosts( String searchTerm, PageInfo pageInfo) {
+        try{
+            // Convert sort order to Sort.Direction
+            Sort.Direction direction = "desc".equalsIgnoreCase(pageInfo.getSortOrder()) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+            // Create dynamic Sort based on field and order
+            Sort sort = Sort.by(direction, pageInfo.getSortField());
+            Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getLimit(),sort);
+            Page<Object[]> templatePostPage = templatePostRepository.getFilteredTemplatePosts(searchTerm, pageable
+            );
+            List<TemplatePost> posts = templatePostPage.map(row ->{
+                TemplatePost post = (TemplatePost) row[0];
+                post.setAvgRating((double)row[1]);
+                return post;
+            }).getContent();
+
+
+            // Create PageInfo for pagination metadata
+            PageInfo newPageInfo = new PageInfo(
+                    pageInfo.getLimit(),
+                    pageInfo.getPage(),
+                    (int) templatePostPage.getTotalElements(),
+                    templatePostPage.getTotalPages(),
+                    pageInfo.getSortField() ,
+                    pageInfo.getSortOrder() ,
+                    templatePostPage.hasPrevious() ,
+                    templatePostPage.hasNext()
+            );
+
+            return new TemplatePostConnection(posts, newPageInfo);
+        }
+        catch(Exception e){
+            log.error(ERROR_MESSAGE_SERVICE_LAYER +" getFilteredTemplatePosts: {}",e.getMessage());
+            throw e;
+        }
     }
 
     public TemplatePost getById(String id){

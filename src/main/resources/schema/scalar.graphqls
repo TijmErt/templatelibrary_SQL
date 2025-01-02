@@ -1,0 +1,26 @@
+scalar Date
+@specifiedBy(url:
+"https://tools.ietf.org/html/rfc3339"
+)
+scalar Upload
+
+type PageInfo {
+    limit: Int!              # The number of items per page
+    page: Int!             # The starting point of the current page (zero-indexed)
+    total: Int!              # The total number of items
+    totalPages: Int!         # The total number of pages
+    sortField: String!       # The field by which the list is sorted (e.g., "title", "date")
+    sortOrder: String!       # The sort order ("asc" or "desc")
+    hasNextPage: Boolean!    # Flag indicating if there are more pages after the current one
+    hasPreviousPage: Boolean! # Flag indicating if there are pages before the current one
+}
+input PageInfoInput {
+    limit: Int!
+    page: Int!
+    total: Int!
+    totalPages: Int!
+    sortField: String!
+    sortOrder: String!
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+}

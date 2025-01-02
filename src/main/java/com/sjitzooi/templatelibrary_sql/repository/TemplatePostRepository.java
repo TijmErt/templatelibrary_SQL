@@ -8,14 +8,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface TemplatePostRepository extends JpaRepository<TemplatePost, String> {
-
-//    @Query("SELECT tp FROM TemplatePost tp JOIN tp.categories t WHERE (:name IS NULL OR tp.name LIKE %:name%) " +
-//            "AND (:tags IS NULL OR t.id IN :categories)")
-//    public Page<TemplatePost> findFilteredTemplatePosts(@Param("name") String name,
-//                                                 @Param("categories") List<String> categories,
-//                                                 Pageable pageable);
+    @Query(value =
+                    "SELECT tp, ROUND(COALESCE(AVG(r.rating), 1), 1) AS avgRating FROM template_post tp" +
+                            "                     LEFT JOIN review r ON tp.id = r.reviewedPost.id " +
+                            "WHERE (:searchTerm IS NULL OR tp.title ILIKE '%' || :searchTerm || '%')" +
+                            "group by tp.id, tp.createdDate, tp.description, tp.fileKey, tp.title, tp.author.id")
+    Page<Object[]> getFilteredTemplatePosts(@Param("searchTerm") String searchTerm,
+                                                 Pageable pageable);
 }

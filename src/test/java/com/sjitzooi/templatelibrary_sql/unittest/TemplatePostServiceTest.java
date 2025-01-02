@@ -46,7 +46,7 @@ public class TemplatePostServiceTest {
     @Test
     void testGetById_Found() {
         //Arrange
-        TemplatePost post = new TemplatePost("1", "Template 1","Description", LocalDate.now(),"",new User(),new ArrayList<>(),new ArrayList<>());
+        TemplatePost post = new TemplatePost("1", "Template 1","Description", LocalDate.now(),"",new User(),new ArrayList<>(),new ArrayList<>(),0.0);
         when(templatePostRepository.findById("1")).thenReturn(Optional.of(post));
 
         //Act
@@ -74,7 +74,7 @@ public class TemplatePostServiceTest {
                 "file",
                 "test.pdf",
                 "application/pdf",
-                "test".getBytes());
+                new byte[]{0x25, 0x50, 0x44, 0x46, 0x2D});
         when(noSQLCallerService.uploadFile(mockMultipartFile)).thenReturn("documentKey");
 
         TemplatePostInput input = new TemplatePostInput();
