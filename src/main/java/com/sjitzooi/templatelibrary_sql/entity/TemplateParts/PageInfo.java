@@ -17,6 +17,6 @@ public class PageInfo {
     private int totalPages;  // Total number of pages
     private String sortField;  // Field by which the list is sorted (e.g., "title", "date")
     private String sortOrder;  // Sort order ("asc" or "desc")
-    private boolean hasNextPage;  // Flag indicating if there are more items after the current page
     private boolean hasPreviousPage;  // Flag indicating if there are items before the current page
+    private boolean hasNextPage;  // Flag indicating if there are more items after the current page
 }

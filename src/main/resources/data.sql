@@ -8,13 +8,13 @@ INSERT INTO users (id, email, user_name) VALUES
 
 -- Test Data for TemplatePosts
 INSERT INTO template_post (id, created_date, description, file_key, title, user_id) VALUES
-                                                                                        ('tempPost-id-1', '2024-10-29', 'Description for template post 1', 'Key1', 'Template Post Title 1', 'user-id-1'),
-                                                                                        ('tempPost-id-2', '2024-10-11', 'Description for template post 2', 'Key2', 'Template Post Title 2', 'user-id-1'),
-                                                                                        ('tempPost-id-3', '2024-10-10', 'Description for template post 3', 'Key3', 'Template Post Title 3', 'user-id-2'),
-                                                                                        ('tempPost-id-4', '2024-10-27', 'Description for template post 4', 'Key4', 'Template Post Title 4', 'user-id-1'),
-                                                                                        ('tempPost-id-5', '2024-11-15', 'Description for template post 5', 'Key5', 'Template Post Title 5', 'user-id-3'),
-                                                                                        ('tempPost-id-6', '2024-12-05', 'Description for template post 6', 'Key6', 'Template Post Title 6', 'user-id-4'),
-                                                                                        ('tempPost-id-7', '2024-12-01', 'Description for template post 7', 'Key7', 'Template Post Title 7', 'user-id-5');
+                                                                                        ('tempPost-id-1', '2024-10-29', 'Description for template post 1', '5fbc1c8475fd2f2ba84e6c2d', 'Template Post Title 1', 'user-id-1'),
+                                                                                        ('tempPost-id-2', '2024-10-11', 'Description for template post 2', '5fbc1c8475fd2f2ba84e6c2d', 'Template Post Title 2', 'user-id-1'),
+                                                                                        ('tempPost-id-3', '2024-10-10', 'Description for template post 3', '5fbc1c8475fd2f2ba84e6c2d', 'Template Post Title 3', 'user-id-2'),
+                                                                                        ('tempPost-id-4', '2024-10-27', 'Description for template post 4', '5fbc1c8475fd2f2ba84e6c2d', 'Template Post Title 4', 'user-id-1'),
+                                                                                        ('tempPost-id-5', '2024-11-15', 'Description for template post 5', '5fbc1c8475fd2f2ba84e6c2d', 'Template Post Title 5', 'user-id-3'),
+                                                                                        ('tempPost-id-6', '2024-12-05', 'Description for template post 6', '1f3f1e4ba6aa4c509c0ce162', 'Template Post Title 6', 'user-id-4'),
+                                                                                        ('tempPost-id-7', '2024-12-01', 'Description for template post 7', '1f3f1e4ba6aa4c509c0ce162', 'Template Post Title 7', 'user-id-5');
 
 -- Test Data for Categories
 INSERT INTO category (id, name) VALUES
