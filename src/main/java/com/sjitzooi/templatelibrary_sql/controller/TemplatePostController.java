@@ -1,61 +1,72 @@
 package com.sjitzooi.templatelibrary_sql.controller;
 
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsMutation;
-import com.netflix.graphql.dgs.DgsQuery;
-import com.netflix.graphql.dgs.InputArgument;
-import com.sjitzooi.templatelibrary_sql.entity.DocumentModel;
+import com.netflix.graphql.dgs.*;
+import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.PageInfo;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePost;
+import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostConnection;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostInput;
-import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.TemplatePostModel;
 import com.sjitzooi.templatelibrary_sql.service.TemplatePostService;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
+import java.io.IOException;
 
 @DgsComponent
 @Transactional
 @CrossOrigin(origins ="*" )
+@Slf4j
 public class TemplatePostController {
-
     @Autowired
+    public TemplatePostController(TemplatePostService templatePostService) {
+        this.templatePostService = templatePostService;
+    }
+
     private TemplatePostService templatePostService;
 
     @DgsQuery
-    public TemplatePostModel getTemplatePost(@InputArgument String id) {
-        TemplatePostModel model = new TemplatePostModel();
-        model.setTemplatePost(templatePostService.getById(id));
-
-        DocumentModel docModel = new DocumentModel();
-        docModel.setDocumentKey(model.getTemplatePost().getDocumentKey());
-        docModel.setDocumentType(".tempType");
-        docModel.setDocumentName("tempDocName");
-        docModel.setUploadDate( LocalDate.now());
-
-        model.setDocumentModel(docModel);
-        return model;
+    public TemplatePostConnection getFilteredTemplatePosts(@InputArgument PageInfo pageInfo, @InputArgument String searchTerm){
+        try{
+            TemplatePostConnection templatePosts = templatePostService.getFilteredTemplatePosts(searchTerm,pageInfo);
+            return templatePosts;
+        }
+        catch(Exception e){
+            log.error(e.getMessage());
+            throw new RuntimeException("Failed to fetch TemplatePosts: " + e.getMessage());
+        }
     }
 
+
+    @DgsQuery
+    public TemplatePost getTemplatePost(@InputArgument String id) {
+
+        try {
+            TemplatePost model = templatePostService.getById(id);
+            log.info("TemplatePost fetched with ID: {}", model.getId());
+            return model;
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("Failed to fetch TemplatePost: " + e.getMessage());
+        }
+    }
+
+    @Secured("ROLE_USER")
     @DgsMutation
-    public TemplatePostModel createTemplatePost(@InputArgument TemplatePostInput input) {
-        TemplatePostModel model = new TemplatePostModel();
-        TemplatePost temp = templatePostService.save(input);
-        String id = temp.getId();
-        TemplatePost templatePost = templatePostService.getById(id);
-        model.setTemplatePost(templatePost);
+    public String createTemplatePost(@InputArgument MultipartFile file, @InputArgument TemplatePostInput input) throws IOException {
 
-        DocumentModel docModel = new DocumentModel();
-        docModel.setDocumentType(input.getDocumentType());
-        docModel.setDocumentName(input.getDocumentName());
-        docModel.setDocumentKey(model.getTemplatePost().getDocumentKey());
-        docModel.setUploadDate( LocalDate.now());
-
-        model.setDocumentModel(docModel);
-
-        System.out.println(model.getTemplatePost().getAuthor().getUserName());
-        System.out.println(model.getDocumentModel());
-        return model;
+        try{
+            TemplatePost temp = templatePostService.save(file,input);
+            log.info("TemplatePost created with ID: {}", temp.getId());
+            log.info("File stored with key: {}", temp.getFileKey());
+            return temp.getId();
+        }
+        catch (Exception e) {
+            log.error("Error creating TemplatePost: {}", e.getMessage());
+            throw new RuntimeException("Failed to create TemplatePost: " + e.getMessage());
+        }
     }
 }

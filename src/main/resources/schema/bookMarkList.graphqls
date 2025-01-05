@@ -1,0 +1,6 @@
+type BookMarkList {
+    id: ID!
+    title: String!
+    listOwner: User!
+    myPosts: [TemplatePost!]
+}
