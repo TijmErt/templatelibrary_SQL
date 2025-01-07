@@ -5,8 +5,10 @@ type Query{
 
 type Mutation{
     createTemplatePost(input: TemplatePostInput!, file: Upload) : String
+    updateTemplatePost(postID: ID!, input: UpdateTemplatePostInput!): TemplatePost
 }
 
+#Types
 type TemplatePost  {
     id: ID!
     title: String!
@@ -19,6 +21,12 @@ type TemplatePost  {
     avgRating: Float
 }
 
+type TemplatePostConnection {
+    posts: [TemplatePost]
+    pageInfo: PageInfo
+}
+
+#inputs
 input TemplatePostInput{
     title: String!
     description: String
@@ -26,10 +34,13 @@ input TemplatePostInput{
     authorId: String
 }
 
-type TemplatePostConnection {
-    posts: [TemplatePost]
-    pageInfo: PageInfo
+input UpdateTemplatePostInput {
+    title: String
+    description: String
+    createdDate: Date
+    categories: [String]
 }
+
 
 
 

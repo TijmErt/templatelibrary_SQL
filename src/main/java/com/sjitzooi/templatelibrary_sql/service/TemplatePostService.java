@@ -1,6 +1,9 @@
 package com.sjitzooi.templatelibrary_sql.service;
 
+import com.netflix.graphql.dgs.InputArgument;
+import com.sjitzooi.templatelibrary_sql.entity.Category;
 import com.sjitzooi.templatelibrary_sql.entity.TemplateParts.*;
+import com.sjitzooi.templatelibrary_sql.entity.User;
 import com.sjitzooi.templatelibrary_sql.repository.TemplatePostRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -27,12 +30,14 @@ public class TemplatePostService {
     private UserService userService;
 
     private NoSQLCallerService noSQLCallerService;
+    private CategoryService categoryService;
 
     @Autowired
-    public TemplatePostService(TemplatePostRepository templatePostRepository, UserService userService, NoSQLCallerService noSQLCallerService) {
+    public TemplatePostService(TemplatePostRepository templatePostRepository, UserService userService, NoSQLCallerService noSQLCallerService, CategoryService categoryService) {
         this.templatePostRepository = templatePostRepository;
         this.userService = userService;
         this.noSQLCallerService = noSQLCallerService;
+        this.categoryService = categoryService;
     }
 
     public TemplatePostConnection getFilteredTemplatePosts( String searchTerm, PageInfo pageInfo) {
@@ -114,5 +119,31 @@ public class TemplatePostService {
             log.error(ERROR_MESSAGE_SERVICE_LAYER +" save: {}",e.getMessage());
             throw e;
         }
+    }
+
+    public TemplatePost updateTemplatePost(@InputArgument String id, @InputArgument UpdateTemplatePostInput input){
+        TemplatePost templatePost;
+        try{
+            templatePost = this.getById(id);
+
+            if (input.getTitle() != null) {
+                templatePost.setTitle(input.getTitle());
+            }
+            if (input.getDescription() != null) {
+                templatePost.setDescription(input.getDescription());
+            }
+            if (input.getCreatedDate() != null) {
+                templatePost.setCreatedDate(input.getCreatedDate());
+            }
+            if (input.getCategories() != null) {
+                List<Category> categories = categoryService.findAllByIds(input.getCategories());
+                templatePost.setCategories(categories);
+            }
+        }
+        catch(Exception e){
+            log.error(ERROR_MESSAGE_SERVICE_LAYER +" updateTemplatePost: {}",e.getMessage());
+            throw e;
+        }
+        return templatePost;
     }
 }
