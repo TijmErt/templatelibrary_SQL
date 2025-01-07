@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.awt.print.Book;
 import java.util.List;
 
 @Entity(name = "users" )
@@ -34,5 +36,8 @@ public class User {
 
     @OneToMany(mappedBy = "author")
     private List<Review> myReviews;
+
+    @OneToMany(mappedBy = "listOwner")
+    private List<BookMarkList> myBookMarkLists;
 
 }

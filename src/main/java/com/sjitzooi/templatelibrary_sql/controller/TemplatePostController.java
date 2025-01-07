@@ -26,7 +26,7 @@ public class TemplatePostController {
     private final SimpMessagingTemplate messagingTemplate;
     private TemplatePostService templatePostService;
 
-    @DgsQuery
+    @DgsQuery()
     public TemplatePostConnection getFilteredTemplatePosts(@InputArgument PageInfo pageInfo, @InputArgument String searchTerm){
         try{
             TemplatePostConnection templatePosts = templatePostService.getFilteredTemplatePosts(searchTerm,pageInfo);
@@ -78,8 +78,8 @@ public class TemplatePostController {
             model = templatePostService.updateTemplatePost(postID, input);
         }
         catch (Exception e) {
-            log.error("Error creating TemplatePost: {}", e.getMessage());
-            throw new RuntimeException("Failed to create TemplatePost: " + e.getMessage());
+            log.error("Error Update TemplatePost: {}", e.getMessage());
+            throw new RuntimeException("Failed to Update TemplatePost: " + e.getMessage());
         }
         Object updatedInfo = new Object(){
             String id = model.getId();

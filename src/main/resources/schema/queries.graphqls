@@ -1,0 +1,7 @@
+type Query{
+    getTemplatePost(id: String!) : TemplatePost
+    getFilteredTemplatePosts(pageInfo: PageInfoInput, , searchTerm: String):TemplatePostConnection
+
+    getAllUsers:[User]
+    getUser(id:String!): User
+}

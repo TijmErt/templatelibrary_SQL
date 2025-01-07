@@ -1,14 +1,3 @@
-type Query{
-    getTemplatePost(id: String!) : TemplatePost
-    getFilteredTemplatePosts(pageInfo: PageInfoInput, , searchTerm: String):TemplatePostConnection
-}
-
-type Mutation{
-    createTemplatePost(input: TemplatePostInput!, file: Upload) : String
-    updateTemplatePost(postID: ID!, input: UpdateTemplatePostInput!): TemplatePost
-}
-
-#Types
 type TemplatePost  {
     id: ID!
     title: String!
