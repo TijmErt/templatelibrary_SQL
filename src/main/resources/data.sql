@@ -50,14 +50,16 @@ INSERT INTO bookmark_list (id, title, user_id) VALUES
 
 -- Test Data for Bookmark List - Template Post Relationships
 INSERT INTO bookmark_list_template_post (bookmark_list_id, template_post_id) VALUES
-('bookmark-id-1', 'tempPost-id-1'),
-('bookmark-id-1', 'tempPost-id-2'),
+('bookmark-id-1', 'tempPost-id-3'),
+('bookmark-id-1', 'tempPost-id-5'),
+('bookmark-id-2', 'tempPost-id-1'),
 ('bookmark-id-2', 'tempPost-id-2'),
-('bookmark-id-2', 'tempPost-id-3'),
-('bookmark-id-3', 'tempPost-id-1'),
-('bookmark-id-3', 'tempPost-id-4'),
-('bookmark-id-4', 'tempPost-id-6'),
-('bookmark-id-5', 'tempPost-id-7'),
+('bookmark-id-3', 'tempPost-id-7'),
+('bookmark-id-4', 'tempPost-id-2'),
+('bookmark-id-4', 'tempPost-id-7'),
+('bookmark-id-5', 'tempPost-id-1'),
+('bookmark-id-5', 'tempPost-id-4'),
+('bookmark-id-6', 'tempPost-id-4'),
 ('bookmark-id-6', 'tempPost-id-5');
 
 -- Test Data for Reviews Ordered by Template Post
