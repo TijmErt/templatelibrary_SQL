@@ -8,9 +8,7 @@ jobs:
 
     runs-on: ubuntu-latest
     # Service containers to run with `container-job`
-    container:
-      image: grafana/k6:latest
-      options: --user root    
+
       
     steps:
     - uses: actions/checkout@v4
