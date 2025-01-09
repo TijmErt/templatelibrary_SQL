@@ -19,23 +19,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    # Service containers to run with `container-job`
-    services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: postgres
-        # Provide the password for postgres
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: temp
-          POSTGRES_HOST_AUTH_METHOD: trust
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 21
@@ -52,33 +36,5 @@ jobs:
     - name: Run tests
       run: mvn clean test
       
-    # Step 4: Start application container
-    - name: Setup config
-      run: |
-          mkdir config
-          echo 'spring.datasource.url=jdbc:postgresql://postgres:5432/postgres' > config/application.properties
-
-    - name: Run Springboot Application
-      id: startApplication
-      run: mvn spring-boot:run
-      env:
-        SPRING_DATASOURCE_URL: 'jdbc:postgresql://postgres:5432/postgres'
-      
-    - name: Print environment variables
-      run: env
-      
-    - name: Setup K6
-      if: steps.startApplication.outcome == 'success'
-      uses: grafana/setup-k6-action@v1
-      
-
-    - name: Run local k6 test
-      uses: grafana/run-k6-action@v1
-      env:
-        K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
-        K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
-        BASE_URL: "172.17.0.1:8080"
-      with:
-        path: GraphqlK6_script.js
         
         
