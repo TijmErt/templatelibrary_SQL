@@ -34,11 +34,12 @@ jobs:
     - name: Print environment variables
       run: env
 
-    - name: Run local k6 test
-      uses: grafana/run-k6-action@v1
-      env:
-        K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
-        K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
-        BASE_URL: "localhost:8080"
-      with:
-        path: GraphqlK6_script.js
+    - name: Run local k6 test and push results to K6 Cloud
+      run: |
+        docker run --rm -i \
+          -v $(pwd):/app \
+          -w /app \
+          -e K6_CLOUD_TOKEN=${{ secrets.K6_CLOUD_TOKEN }} \
+          -e K6_CLOUD_PROJECT_ID=${{ secrets.K6_CLOUD_PROJECT_ID }} \
+          -e BASE_URL="localhost:8080" \
+          grafana/k6 run --out cloud GraphqlK6_script.js
