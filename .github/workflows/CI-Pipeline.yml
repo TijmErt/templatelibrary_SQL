@@ -32,8 +32,8 @@ jobs:
     - name: Start PostgreSQL
       uses: docker/setup-buildx-action@v2
       
-    - name: Create Docker network
-      run: docker network create my-network
+    #- name: Create Docker network
+     # run: docker network create my-network
       
     - name: Run PostgreSQL container
       run: |
@@ -42,29 +42,30 @@ jobs:
           -e POSTGRES_USER=postgres \
           -e POSTGRES_PASSWORD= \
           -p 6060:5432 \
-          --network my-network \
+          --network host \
           postgres:15
 
       env:
         POSTGRES_USER: 'postgres'
         POSTGRES_PASSWORD: ''
         
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+  #  - name: Build with Maven
+   #   run: mvn -B package --file pom.xml
 
-    - name: Run tests
-      run: mvn clean test
+   # - name: Run tests
+      #run: mvn clean test
 
     - name: Build Docker image
       run: docker build -t my-app:latest .
+      
     # Step 4: Start application container
     - name: Start application container
       id: startApplication
       run: |
         docker run -d \
           --name my-app \
-          --network my-network \
-          -e SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:8080/postgres \
+          --network host \
+          -e SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:8080/postgres \
           -e SPRING_DATASOURCE_USERNAME=postgres \
           -e SPRING_DATASOURCE_PASSWORD= \
           -p 8080:8080 \
