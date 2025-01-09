@@ -21,8 +21,6 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: springboot
-    ports:
-      - "8080:8080"
     network_mode: host
     environment:
       SPRING_DATASOURCE_URL: 'jdbc:postgresql://localhost:5432/postgres'
