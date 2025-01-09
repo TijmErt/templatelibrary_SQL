@@ -59,6 +59,7 @@ jobs:
       run: docker build -t my-app:latest .
     # Step 4: Start application container
     - name: Start application container
+      id: startApplication
       run: |
         docker run -d \
           --name my-app \
@@ -72,6 +73,7 @@ jobs:
     # Step 5: Wait for application readiness
         
     - name: Setup K6
+      if: steps..startApplication.outcome == 'success'
       uses: grafana/setup-k6-action@v1
 
 
