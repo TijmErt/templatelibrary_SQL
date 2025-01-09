@@ -93,7 +93,7 @@ jobs:
       env:
         K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
         K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
-        BASE_URL: 172.17.0.1
+        BASE_URL: "172.17.0.1:8080"
       with:
         path: GraphqlK6_script.js
         
