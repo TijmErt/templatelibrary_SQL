@@ -23,12 +23,13 @@ jobs:
       run: |
           docker-compose down --remove-orphans
           docker-compose up --build --detach
-          sleep 30 
 
     - name: Check running containers
       if: steps.ComposeSetup.outcome == 'success'
       run: |
             docker ps
+            docker-compose networks
+            docker network ls
             docker logs springboot
       
     - name: Print environment variables
