@@ -2,7 +2,9 @@ import http from 'k6/http';
 import { check, sleep } from 'k6';
 
 // Replace with your actual GraphQL endpoint
-const BASE_URL = 'http://localhost:8080/graphql';
+//172.17.0.1
+
+const BASE_URL = `http://${__ENV.BASE_URL || "localhost:8080"}/graphql`;
 
 // GraphQL queries for getTemplatePost and getFilteredTemplatePosts
 const GET_TEMPLATE_POST_QUERY = `
