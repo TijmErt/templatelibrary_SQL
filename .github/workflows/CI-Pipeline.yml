@@ -19,7 +19,23 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: temp
+          POSTGRES_HOST_AUTH_METHOD: trust
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 21
@@ -29,54 +45,21 @@ jobs:
         distribution: 'temurin'
         cache: maven
     # Step 3: Start PostgreSQL database
-    - name: Start PostgreSQL
-      uses: docker/setup-buildx-action@v2
-      
-    - name: Create Docker network
-      run: docker network create my-network
-      
-    - name: Run PostgreSQL container
-      run: |
-        docker run -d \
-          --name postgres \
-          -e POSTGRES_USER=postgres \
-          -e POSTGRES_PASSWORD= \
-          -p 6060:5432 \
-          --network my-network \
-          postgres:15
-
-      env:
-        POSTGRES_USER: 'postgres'
-        POSTGRES_PASSWORD: ''
         
-  #  - name: Build with Maven
-   #   run: mvn -B package --file pom.xml
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
 
-   # - name: Run tests
-      #run: mvn clean test
-
-    - name: Build Docker image
-      run: docker build -t my-app:latest .
+    - name: Run tests
+      run: mvn clean test
       
     # Step 4: Start application container
-    - name: Start application container
-      id: startApplication
+    - name: Setup config
       run: |
-        docker run -d \
-          --name my-app \
-          --network my-network \
-          -e SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:8080/postgres \
-          -e SPRING_DATASOURCE_USERNAME=postgres \
-          -e SPRING_DATASOURCE_PASSWORD= \
-          -p 8080:8080 \
-          my-app:latest
+          mkdir config
+          echo 'spring.datasource.url=jdbc:postgresql://postgres:6060/school_management' > config/application.properties
 
-    # Step 5: Wait for application readiness
-    - name: Inspect application logs
-      run: docker logs my-app
-      
-    - name: Inspect container ports
-      run: docker ps --filter "name=my-app" --format "table {{.Names}}\t{{.Ports}}"
+    - name: Run Springboot Application
+      run: mvn spring-boot:run
       
     - name: Print environment variables
       run: env
@@ -85,8 +68,6 @@ jobs:
       if: steps.startApplication.outcome == 'success'
       uses: grafana/setup-k6-action@v1
       
-
-
 
     - name: Run local k6 test
       uses: grafana/run-k6-action@v1
