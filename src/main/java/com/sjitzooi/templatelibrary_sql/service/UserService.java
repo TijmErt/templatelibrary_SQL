@@ -18,7 +18,9 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
     public User getById(String id) {
         try{
             return userRepository.findById(id).isPresent() ? userRepository.findById(id).get() : null;

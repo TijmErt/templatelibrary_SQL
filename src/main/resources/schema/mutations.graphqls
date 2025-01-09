@@ -1,0 +1,4 @@
+type Mutation{
+    createTemplatePost(input: TemplatePostInput!, file: Upload) : String
+    updateTemplatePost(postID: ID!, input: UpdateTemplatePostInput!): TemplatePost
+}

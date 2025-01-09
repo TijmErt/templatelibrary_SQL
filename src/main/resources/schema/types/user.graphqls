@@ -1,7 +1,10 @@
+
+
 type User {
     id: ID!
     userName: String!
     email: String!
     myPosts: [TemplatePost!]
     myReviews: [Review!]
+    myBookMarkLists:[BookMarkList!]
 }

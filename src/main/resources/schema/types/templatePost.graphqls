@@ -1,0 +1,38 @@
+type TemplatePost  {
+    id: ID!
+    title: String!
+    description: String
+    createdDate: Date
+    fileKey: String
+    author: User
+    reviews: [Review]
+    categories:[category]
+    avgRating: Float
+}
+
+type TemplatePostConnection {
+    posts: [TemplatePost]
+    pageInfo: PageInfo
+}
+
+#inputs
+input TemplatePostInput{
+    title: String!
+    description: String
+    createdDate: Date
+    authorId: String
+}
+
+input UpdateTemplatePostInput {
+    title: String
+    description: String
+    createdDate: Date
+    categories: [String]
+}
+
+
+
+
+
+
+
