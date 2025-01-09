@@ -45,6 +45,11 @@ export const options = {
         'http_req_failed': ['rate<0.01'],
     },
 };
+function getRandomInt(min, max) {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+}
 
 export default function () {
     const token ='Basic dXNlcjpwYXNzd29yZA==';
@@ -55,7 +60,7 @@ export default function () {
     // Test for getting a single TemplatePost
     const getTemplatePostPayload = JSON.stringify({
         query: GET_TEMPLATE_POST_QUERY,
-        variables: { id: 'tempPost-id-1' }
+        variables: { id: 'tempPost-id-'+getRandomInt(1,7) }
     });
 
     const getTemplatePostResponse = http.post(BASE_URL, getTemplatePostPayload, {
