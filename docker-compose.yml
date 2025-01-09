@@ -6,8 +6,6 @@ services:
     container_name: postgres
     ports:
       - "5432:5432"
-    networks:
-          - compose_network
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
@@ -26,8 +24,6 @@ services:
     ports:
       - "8080:8080"
 
-    networks:
-          - compose_network
     environment:
       SPRING_DATASOURCE_URL: 'jdbc:postgresql://localhost:5432/postgres'
       SPRING_DATASOURCE_USERNAME: postgres
@@ -36,6 +32,3 @@ services:
       postgres:
         condition: service_healthy
 
-    networks:
-      compose_network:
-            driver: bridge 
