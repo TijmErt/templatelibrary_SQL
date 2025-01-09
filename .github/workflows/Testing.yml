@@ -28,7 +28,6 @@ jobs:
       if: steps.ComposeSetup.outcome == 'success'
       run: |
             docker ps
-            docker network inspect -f json
             docker network ls
             docker logs springboot
       
