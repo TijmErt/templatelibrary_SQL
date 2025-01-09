@@ -70,12 +70,6 @@ jobs:
           my-app:latest
 
     # Step 5: Wait for application readiness
-    - name: Wait for application to be ready
-      run: |
-        echo "Waiting for application to be ready..."
-        until curl --output /dev/null --silent --head --fail http://localhost:8080; do
-          sleep 5
-        done
         
     - name: Setup K6
       uses: grafana/setup-k6-action@v1
