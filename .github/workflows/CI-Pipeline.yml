@@ -24,7 +24,8 @@ jobs:
         image: postgres:latest  # Use the official PostgreSQL Docker image
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ''
+          POSTGRES_PASSWORD: 'temp'
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
           - 6060:5432  # Expose PostgreSQL port to the host
         options: --health-cmd "pg_isready -U user" --health-timeout 30s --health-start-period 5s --health-retries 5
@@ -41,23 +42,6 @@ jobs:
     - name: Start PostgreSQL
       uses: docker/setup-buildx-action@v2
       
-    - name: Create Docker network
-      run: docker network create my-network
-      
-    - name: Run PostgreSQL container
-      run: |
-        docker run -d \
-          --name postgres \
-          -e POSTGRES_USER=postgres \
-          -e POSTGRES_PASSWORD= \
-          -p 6060:5432 \
-          --network my-network \
-          postgres:15
-
-      env:
-        POSTGRES_USER: 'postgres'
-        POSTGRES_PASSWORD: ''
-        
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
