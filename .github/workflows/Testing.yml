@@ -56,18 +56,13 @@ jobs:
       run: |
           psql -h localhost -U postgres -d postgres -c "SELECT version();"
       
-    # Step 4: Start application container
-    - name: Setup config
-      run: |
-          mkdir config
-          echo 'spring.datasource.url=jdbc:postgresql://localhost:5432/postgres' > config/application.properties
+
 
     - name: Run Springboot Application
       id: startApplication
       run: mvn spring-boot:run
       env:
         SPRING_DATASOURCE_URL: 'jdbc:postgresql://localhost:5432/postgres' 
-        temp: ${{job.services.postgres.id}}
       
     - name: Print environment variables
       run: env
