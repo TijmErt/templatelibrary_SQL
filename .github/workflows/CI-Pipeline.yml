@@ -64,7 +64,7 @@ jobs:
       run: |
         docker run -d \
           --name my-app \
-          --network my-networks \
+          --network my-network \
           -e SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:8080/postgres \
           -e SPRING_DATASOURCE_USERNAME=postgres \
           -e SPRING_DATASOURCE_PASSWORD= \
