@@ -80,7 +80,7 @@ jobs:
       
     - name: Print environment variables
       run: env
-        
+      
     - name: Setup K6
       if: steps.startApplication.outcome == 'success'
       uses: grafana/setup-k6-action@v1
@@ -88,12 +88,13 @@ jobs:
 
 
 
-   # - name: Run local k6 test
-    #  uses: grafana/run-k6-action@v1
-   #   env:
-    #    K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
-     #   K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
-      #with:
-       # path: GraphqlK6_script.js
+    - name: Run local k6 test
+      uses: grafana/run-k6-action@v1
+      env:
+        K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
+        K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
+        BASE_URL: 172.17.0.1
+      with:
+        path: GraphqlK6_script.js
         
         
