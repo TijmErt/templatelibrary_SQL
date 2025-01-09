@@ -36,6 +36,8 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports: 
+          - 6060:5432⁠
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 21
@@ -56,10 +58,13 @@ jobs:
     - name: Setup config
       run: |
           mkdir config
-          echo 'spring.datasource.url=jdbc:postgresql://postgres:6060/school_management' > config/application.properties
+          echo 'spring.datasource.url=jdbc:postgresql://postgres:6060/postgres' > config/application.properties
 
     - name: Run Springboot Application
+      id: startApplication
       run: mvn spring-boot:run
+      env:
+        SPRING_DATASOURCE_URL: 'jdbc:postgresql://postgres:6060/postgres'
       
     - name: Print environment variables
       run: env
