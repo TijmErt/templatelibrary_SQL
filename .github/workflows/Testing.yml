@@ -1,0 +1,53 @@
+name: Docker Image CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    # Service containers to run with `container-job`
+        # Docker Hub image that `container-job` executes in
+    container: node:20-bookworm-slim
+
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: 'temp'
+          POSTGRES_HOST_AUTH_METHOD: trust
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 6060:5431
+
+      spring-app:
+        # Dynamically populate this service with the Docker image built from your repository
+        image: my-spring-app:latest
+        ports:
+          - 8080:8080
+        options: >-
+          --link postgres:postgres  # Connect Spring app to the PostgreSQL service
+          
+    steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Docker image for Spring app
+      run: |
+        docker build -t my-spring-app .  # Build the Docker image from the Dockerfile
+
+  
+    - name: Populate the spring-app service
+      run: |
+        docker tag my-spring-app:latest localhost:5000/my-spring-app:latest  # Tag image for local use
+
