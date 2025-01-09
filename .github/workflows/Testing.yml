@@ -41,5 +41,5 @@ jobs:
           -w /app \
           -e K6_CLOUD_TOKEN=${{ secrets.K6_CLOUD_TOKEN }} \
           -e K6_CLOUD_PROJECT_ID=${{ secrets.K6_CLOUD_PROJECT_ID }} \
-          -e BASE_URL="localhost:8080" \
+          -e BASE_URL="springboot:8080" \
           grafana/k6 run --out cloud GraphqlK6_script.js
