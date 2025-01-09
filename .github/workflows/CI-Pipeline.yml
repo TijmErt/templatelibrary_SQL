@@ -73,7 +73,7 @@ jobs:
     # Step 5: Wait for application readiness
         
     - name: Setup K6
-      if: steps..startApplication.outcome == 'success'
+      if: steps.startApplication.outcome == 'success'
       uses: grafana/setup-k6-action@v1
 
 
