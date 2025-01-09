@@ -37,7 +37,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports: 
-          - 6060:5432⁠
+          - 5432:6060⁠
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 21
