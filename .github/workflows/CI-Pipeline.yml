@@ -28,8 +28,56 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
+    # Step 3: Start PostgreSQL database
+    - name: Start PostgreSQL
+      uses: docker/setup-buildx-action@v2
+    - name: Run PostgreSQL container
+      run: |
+        docker run -d \
+          --name postgres \
+          -e POSTGRES_USER=postgres \
+          -e POSTGRES_PASSWORD= \
+          -p 6060:5432 postgres:15
+      env:
+        POSTGRES_USER: 'postgres'
+        POSTGRES_PASSWORD: ''
+        
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
     - name: Run tests
       run: mvn clean test
+    # Step 5: Start Spring Boot application
+    # Step 4: Start application container
+    - name: Start application container
+      run: |
+        docker run -d \
+          --name my-app \
+          --link postgres:postgres \
+          -e SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:8080/postgres \
+          -e SPRING_DATASOURCE_USERNAME=postgres \
+          -e SPRING_DATASOURCE_PASSWORD= \
+          -p 8080:8080 \
+          my-app:latest
+
+    # Step 5: Wait for application readiness
+    - name: Wait for application to be ready
+      run: |
+        echo "Waiting for application to be ready..."
+        until curl --output /dev/null --silent --head --fail http://localhost:8080; do
+          sleep 5
+        done
+        
+    - name: Setup K6
+      uses: grafana/setup-k6-action@v1
+
+
+    - name: Run local k6 test
+      uses: grafana/run-k6-action@v1
+      env:
+        K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
+        K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
+      with:
+        path: GraphqlK6_script.js
+        
+        
