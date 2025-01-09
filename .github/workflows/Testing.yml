@@ -1,24 +1,22 @@
-name: Docker Image CI
+name: Testing
 
 on:
   workflow_dispatch:
 
 jobs:
-
   build:
 
     runs-on: ubuntu-latest
     # Service containers to run with `container-job`
-        # Docker Hub image that `container-job` executes in
-    container: node:20-bookworm-slim
-
     services:
       # Label used to access the service container
       postgres:
         # Docker Hub image
         image: postgres
+        # Provide the password for postgres
         env:
-          POSTGRES_PASSWORD: 'temp'
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: temp
           POSTGRES_HOST_AUTH_METHOD: trust
         # Set health checks to wait until postgres has started
         options: >-
@@ -26,28 +24,47 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports:
-          # Maps tcp port 5432 on service container to the host
-          - 6060:5431
-
-      spring-app:
-        # Dynamically populate this service with the Docker image built from your repository
-        image: my-spring-app:latest
-        ports:
-          - 8080:8080
-        options: >-
-          --link postgres:postgres  # Connect Spring app to the PostgreSQL service
-          
     steps:
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+    - uses: actions/checkout@v4
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    # Step 3: Start PostgreSQL database
+        
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
 
-    - name: Build Docker image for Spring app
+    - name: Run tests
+      run: mvn clean test
+      
+    # Step 4: Start application container
+    - name: Setup config
       run: |
-        docker build -t my-spring-app .  # Build the Docker image from the Dockerfile
+          mkdir config
+          echo 'spring.datasource.url=jdbc:postgresql://localhost:5432/postgres' > config/application.properties
 
-  
-    - name: Populate the spring-app service
-      run: |
-        docker tag my-spring-app:latest localhost:5000/my-spring-app:latest  # Tag image for local use
+    - name: Run Springboot Application
+      id: startApplication
+      run: mvn spring-boot:run
+      env:
+        SPRING_DATASOURCE_URL: 'jdbc:postgresql://localhost:5432/postgres'
+      
+    - name: Print environment variables
+      run: env
+      
+    - name: Setup K6
+      if: steps.startApplication.outcome == 'success'
+      uses: grafana/setup-k6-action@v1
+      
 
+    - name: Run local k6 test
+      uses: grafana/run-k6-action@v1
+      env:
+        K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
+        K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
+        BASE_URL: "http://localhost:8080"
+      with:
+        path: GraphqlK6_script.js
