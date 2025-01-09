@@ -32,4 +32,16 @@ public class CategoryService {
         }
         return categories;
     }
+
+    public List<Category> getAll(){
+        List<Category> categories = new ArrayList<>();
+        try{
+            categories = categoryRepository.findAll();
+        }
+        catch(Exception e){
+            log.error(ERROR_MESSAGE_SERVICE_LAYER +" getAll: {}",e.getMessage());
+            throw e;
+        }
+        return categories;
+    }
 }
