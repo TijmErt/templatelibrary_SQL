@@ -36,7 +36,7 @@ jobs:
     - name: Run local k6 test and push results to K6 Cloud
       run: |
         docker run --rm -i \
-          -itd --network=templatelibrary_sql_default    \
+          --network=templatelibrary_sql_default    \
           -v $(pwd):/app \
           -w /app \
           -e K6_CLOUD_TOKEN=${{ secrets.K6_CLOUD_TOKEN }} \
