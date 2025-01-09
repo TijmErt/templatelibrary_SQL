@@ -47,7 +47,9 @@ jobs:
 
     - name: Run tests
       run: mvn clean test
-    # Step 5: Start Spring Boot application
+
+    - name: Build Docker image
+      run: docker build -t my-app:latest .
     # Step 4: Start application container
     - name: Start application container
       run: |
