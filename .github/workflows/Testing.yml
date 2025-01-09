@@ -28,6 +28,7 @@ jobs:
       if: steps.ComposeSetup.outcome == 'success'
       run: |
             docker ps
+            docker network inspect templatelibrary_sql_default
             docker network ls
             docker logs springboot
       
