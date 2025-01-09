@@ -8,7 +8,10 @@ jobs:
 
     runs-on: ubuntu-latest
     # Service containers to run with `container-job`
-        
+    container:
+      image: grafana/k6:latest
+      options: --user root    
+      
     steps:
     - uses: actions/checkout@v4
 
@@ -22,17 +25,16 @@ jobs:
       run: |
           docker-compose down --remove-orphans
           docker-compose up --build --detach
+          sleep 30 
 
     - name: Check running containers
       if: steps.ComposeSetup.outcome == 'success'
-      run: docker ps
+      run: |
+            docker ps
+            docker logs springboot
       
     - name: Print environment variables
       run: env
-      
-    - name: Setup K6
-      uses: grafana/setup-k6-action@v1
-      
 
     - name: Run local k6 test
       uses: grafana/run-k6-action@v1
