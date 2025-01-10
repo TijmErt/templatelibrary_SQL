@@ -42,7 +42,7 @@ jobs:
             docker-compose run k6 &
               while true; do
                 docker ps
-                docker network inspect templatelibrary_sql_default
+                docker network inspect templatelibrary_sql_app-network  
                 docker network ls
                 echo "Network inspect"
                 sleep 10  # Delay for 30 seconds between checks (adjust as needed)
