@@ -27,7 +27,7 @@ jobs:
           K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
           K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
           GITHUB_WORKSPACE: ${{ github.workspace }}
-
+          
     - name: Check running containers
       if: steps.ComposeSetup.outcome == 'success'
       run: |
@@ -35,6 +35,7 @@ jobs:
             docker network inspect templatelibrary_sql_default
             docker network ls
             docker logs springboot
-      
-    - name: Print environment variables
-      run: env
+            
+    - name: Run K6 test
+      if: steps.ComposeSetup.outcome == 'success'
+      run: docker-compose exec k6 k6 run --out cloud /app/GraphqlK6_script.js
