@@ -36,7 +36,7 @@ jobs:
       run: env
     - name: Run local k6 test and push results to K6 Cloud$
       run: |
-         docker run --rm -i --network=templatelibrary_sql_default -v $(pwd):/app -w /app -e K6_CLOUD_TOKEN=${{ secrets.K6_CLOUD_TOKEN }} -e K6_CLOUD_PROJECT_ID={{ secrets.K6_CLOUD_PROJECT_ID } -e BASE_URL="springboot:8080" grafana/k6 run --out cloud GraphqlK6_script.js 
+         docker run -i --network=templatelibrary_sql_default -v $(pwd):/app -w /app -e K6_CLOUD_TOKEN=${{ secrets.K6_CLOUD_TOKEN }} -e K6_CLOUD_PROJECT_ID=${{ secrets.K6_CLOUD_PROJECT_ID } -e BASE_URL="springboot:8080" grafana/k6 run --out cloud GraphqlK6_script.js 
          &
 
           
