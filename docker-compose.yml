@@ -40,13 +40,7 @@ services:
       springboot:
         condition: service_started
     entrypoint: >
-      sh -c "
-        while ! nc -z localhost:8080; do
-          echo 'Waiting for springboot...';
-          sleep 2;
-        done;
-        k6 run --out cloud /app/GraphqlK6_script.js
-      "
+      sh -c "k6 run --out cloud /app/GraphqlK6_script.js"
     ports:
       - "6565:6565"
     environment:
