@@ -44,7 +44,7 @@ services:
     environment:
       K6_CLOUD_TOKEN: ${K6_CLOUD_TOKEN}
       K6_CLOUD_PROJECT_ID: ${K6_CLOUD_PROJECT_ID}
-      BASE_URL: "http://springboot:8080"
+      BASE_URL: "springboot:8080"
     volumes:
       - "${GITHUB_WORKSPACE}:/app"
     entrypoint: ["k6"]
