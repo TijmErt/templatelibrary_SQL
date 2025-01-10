@@ -32,3 +32,24 @@ services:
       postgres:
         condition: service_healthy
 
+
+  k6:
+    image: grafana/k6
+    container_name: k6
+    depends_on:
+      springboot:
+        condition: service_started
+    entrypoint: >
+      sh -c "
+      while ! nc -z springboot 8080; do
+        echo 'Waiting for springboot...';
+        sleep 2;
+      done;
+      k6 run --out cloud /app/GraphqlK6_script.js
+      "
+    environment:
+      K6_CLOUD_TOKEN: ${K6_CLOUD_TOKEN}
+      K6_CLOUD_PROJECT_ID: ${K6_CLOUD_PROJECT_ID}
+      BASE_URL: "springboot:8080"
+    volumes:
+      - "${GITHUB_WORKSPACE}:/app"
