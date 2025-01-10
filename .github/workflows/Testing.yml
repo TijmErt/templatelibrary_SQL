@@ -40,7 +40,7 @@ jobs:
     - name: Run K6 test
       run: | 
             docker network connect templatelibrary_sql_default k6
-            docker-compose exec k6 -T k6 run --out cloud /app/GraphqlK6_script.js &
+            docker-compose run k6 k6 run --out cloud /app/GraphqlK6_script.js &
             docker network connect templatelibrary_sql_default k6 &
               while true; do
                 docker ps
