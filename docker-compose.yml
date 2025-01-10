@@ -39,8 +39,6 @@ services:
     depends_on:
       springboot:
         condition: service_started
-    entrypoint: >
-      sh -c "k6 run --out cloud /app/GraphqlK6_script.js"
     ports:
       - "6565:6565"
     environment:
