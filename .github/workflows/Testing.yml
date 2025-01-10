@@ -39,13 +39,15 @@ jobs:
 
     - name: Run K6 test
       run: | 
+            docker network connect templatelibrary_sql_default k6
             docker-compose exec k6 -T k6 run --out cloud /app/GraphqlK6_script.js &
+            docker network connect templatelibrary_sql_default k6 &
               while true; do
                 docker ps
                 docker network inspect templatelibrary_sql_default
                 docker network ls
                 echo "Network inspect"
-                sleep 30  # Delay for 30 seconds between checks (adjust as needed)
+                sleep 10  # Delay for 30 seconds between checks (adjust as needed)
               done 
       env:
             K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
