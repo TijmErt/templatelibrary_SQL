@@ -22,7 +22,7 @@ jobs:
       id: ComposeSetup
       run: |
           docker-compose down --remove-orphans
-          docker-compose up --build --detach
+          docker compose up postgres springboot --build --detach
       env:
           K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
           K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
@@ -39,9 +39,7 @@ jobs:
 
     - name: Run K6 test
       run: | 
-            docker network connect templatelibrary_sql_default k6
-            docker-compose run k6 k6 run --out cloud /app/GraphqlK6_script.js &
-            docker network connect templatelibrary_sql_default k6 &
+            docker-compose run k6 &
               while true; do
                 docker ps
                 docker network inspect templatelibrary_sql_default
