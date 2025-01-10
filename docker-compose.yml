@@ -41,7 +41,7 @@ services:
         condition: service_started
     entrypoint: >
       sh -c "
-        while ! nc -z springboot 8080; do
+        while ! nc -z springboot:8080; do
           echo 'Waiting for springboot...';
           sleep 2;
         done;
