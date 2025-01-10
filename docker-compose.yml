@@ -23,15 +23,15 @@ services:
     container_name: springboot
     ports:
       - "8080:8080"
-
     environment:
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://localhost:5432/postgres'
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://postgres:5432/postgres'
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
     depends_on:
       postgres:
         condition: service_healthy
-
+    networks:
+      - app-network
 
   k6:
     image: grafana/k6
@@ -44,6 +44,14 @@ services:
     environment:
       K6_CLOUD_TOKEN: ${K6_CLOUD_TOKEN}
       K6_CLOUD_PROJECT_ID: ${K6_CLOUD_PROJECT_ID}
-      BASE_URL: "springboot:8080"
+      BASE_URL: "http://springboot:8080"
     volumes:
       - "${GITHUB_WORKSPACE}:/app"
+    entrypoint: ["k6"]
+    command: ["run", "--out", "cloud", "/app/GraphqlK6_script.js"]
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
