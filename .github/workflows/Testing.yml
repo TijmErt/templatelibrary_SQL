@@ -23,6 +23,10 @@ jobs:
       run: |
           docker-compose down --remove-orphans
           docker-compose up --build --detach
+      env:
+          K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
+          K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
+          GITHUB_WORKSPACE: ${{ github.workspace }}
 
     - name: Check running containers
       if: steps.ComposeSetup.outcome == 'success'
@@ -34,13 +38,3 @@ jobs:
       
     - name: Print environment variables
       run: env
-    - name: Run local k6 test and push results to K6 Cloud$
-      run: |
-         docker run -i --network=templatelibrary_sql_default -v $(pwd):/app -w /app -e K6_CLOUD_TOKEN=${{ secrets.K6_CLOUD_TOKEN }} -e K6_CLOUD_PROJECT_ID=${{ secrets.K6_CLOUD_PROJECT_ID }} -e BASE_URL="springboot:8080" grafana/k6 run --out cloud GraphqlK6_script.js &
-
-          while true; do
-            docker network inspect templatelibrary_sql_default
-            echo "Network inspect result saved to network_inspect_output.txt"
-            sleep 10 # Delay for 30 seconds between checks (adjust as needed)
-          done &
-         wait
