@@ -41,8 +41,8 @@ jobs:
       run: | 
             docker-compose exec k6 -T k6 run --out cloud /app/GraphqlK6_script.js &
               while true; do
-                docker network inspect templatelibrary_sql_default > network_inspect_output.txt
-                echo "Network inspect result saved to network_inspect_output.txt"
+                docker network inspect templatelibrary_sql_default
+                echo "Network inspect"
                 sleep 30  # Delay for 30 seconds between checks (adjust as needed)
               done 
       env:
