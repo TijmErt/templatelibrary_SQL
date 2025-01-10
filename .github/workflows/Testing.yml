@@ -38,12 +38,12 @@ jobs:
             
     - name: Run K6 test
       run: | 
-          docker-compose exec -T k6 k6 run --out cloud /app/GraphqlK6_script.js &
+          docker-compose exec k6 k6 run --out cloud /app/GraphqlK6_script.js &
             while true; do
               docker network inspect templatelibrary_sql_default > network_inspect_output.txt
               echo "Network inspect result saved to network_inspect_output.txt"
               sleep 30  # Delay for 30 seconds between checks (adjust as needed)
-            done &
+            done 
       env:
           K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
           K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
