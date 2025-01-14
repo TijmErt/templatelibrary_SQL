@@ -2,6 +2,7 @@ package com.sjitzooi.templatelibrary_sql.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -19,18 +20,22 @@ public class NoSQLCallerService {
 
     private RestTemplate restTemplate;
 
+    @Value("${url.nosql}")
+    private String urlNosql;
+
     @Autowired
     public NoSQLCallerService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    private static String url = "http://localhost:8081/api/DocumentModelController";
     public String uploadFile(MultipartFile file) {
         try{
+            String url = urlNosql +"/api/DocumentModelController";
             if(file.isEmpty()) {
                 throw new RuntimeException("File is empty");
             }
-
+            log.info(url);
+            log.info(urlNosql);
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
             body.add("file", file.getResource());
 
